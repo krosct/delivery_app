@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "target": "ES2020",
+    "lib": ["DOM"],
+    "types": ["vite/client"]
+  },
+  "include": ["vite.config.ts"]
+}
