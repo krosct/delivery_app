@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pycache
+*.sqlite3
+*.sqlite
+.env
+!.env.example
+.env.*
+
+# Django
+*.log
+db.sqlite3
+media/
+staticfiles/
+
+# Docker
+*.env
+**/venv/
+**/env/
+**/.venv/
+**/.env/
+
+# Node
+node_modules/
+dist/
+build/
+.DS_Store
+
+# VSCode
+.vscode/
+
+# macOS
+.DS_Store
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pytest_cache/
