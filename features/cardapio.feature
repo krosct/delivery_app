@@ -8,4 +8,9 @@ Cenário 1 – Cadastro de item no cardápio com dados válidos O responsável p
 
 Cenário 2 – Tentativa de cadastro de item com dados inválidos ou incompletos O responsável tenta cadastrar um item deixando o nome em branco ou inserindo um preço negativo/zero. O sistema deve exibir mensagens de erro adequadas e impedir o cadastro. O cenário valida as regras de validação do formulário.
 
-Then
+Cenário 2 – Tentativa de cadastro de item com dados inválidos ou incompletos O responsável tenta cadastrar um item deixando o nome em branco ou inserindo um preço negativo/zero. O sistema deve exibir mesnsagens de erro adequadas e impedir o cadastro. O cenário valida as regras de validação do formulário.
+
+Cenário 3 – Criação de categoria e associação de itens O responsável cria uma nova categoria (ex: "Sobremesas") e cadastra os itens pertencentes a ela. O cenário verifica que os itens aparecem agrupados corretamente sob a categoria no cardápio, e que um item não pode pertencer a mais de uma categoria.
+
+Cenário 4 – Geração e acesso ao link público de compartilhamento do cardápio O responsável acessa a opção de compartilhamento e visualiza o link persistente do cardápio. Ao acessar o link sem estar autenticado (sessão anônima), a página do cardápio do restaurante é exibida corretamente com todos os itens e categorias, confirmando que o acesso público funciona sem necessidade de login.
+
