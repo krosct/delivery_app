@@ -9,6 +9,13 @@ E existe um cupom “DESCE20” que oferece “20%” de desconto dentro do praz
 Quando o cliente insere o cupom “DESCE20” na tela de pagamento
 Então o valor final da compra é atualizado para “80,00
 
+Feature: : Aplicar cupom de desconto válido
+Dado que existe um pedido com ID “PEDIDO124” e valor total de “100,00”
+E o pedido está com status “aguardando pagamento”
+E existe um cupom “DESCE20” que oferece “20%” de desconto fora do prazo de validade
+Quando o cliente insere o cupom “DESCE20” na tela de pagamento
+Então o cliente recebe uma mensagem de erro indicando que o cupom é inválido
+
 Feature: Realizar estorno de saldo ao cancelar pedido
 Dado que existe um pedido com ID “PEDIDO123” e valor total de “100,00”
 E o pedido está com status “pago”
