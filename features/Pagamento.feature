@@ -8,3 +8,4 @@ E o pedido está com status “aguardando pagamento”
 E existe um cupom “DESCE20” que oferece “20%” de desconto dentro do prazo de validade
 Quando o cliente insere o cupom “DESCE20” na tela de pagamento
 Então o valor final da compra é atualizado para “80,00
+Então o cliente recebe uma mensagem de confirmação do desconto aplicado
