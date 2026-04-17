@@ -15,3 +15,5 @@ Cenário 3 – Criação de categoria e associação de itens O responsável cri
 Cenário 4 – Geração e acesso ao link público de compartilhamento do cardápio O responsável acessa a opção de compartilhamento e visualiza o link persistente do cardápio. Ao acessar o link sem estar autenticado (sessão anônima), a página do cardápio do restaurante é exibida corretamente com todos os itens e categorias, confirmando que o acesso público funciona sem necessidade de login.
 
 -- Cenário Corrigido
+
++++
