@@ -20,3 +20,6 @@ Cenário 4 – Geração e acesso ao link público de compartilhamento do cardá
 
 ---
 
+Adding new Scenario
+
+-- Ajustando Feature
