@@ -13,3 +13,8 @@ Scenario: Bloqueio de alteração de CNPJ
     Given que o restaurante “Gosto bom” já possui um “CNPJ” cadastrado
     When eu tento editar o campo de “CNPJ”
     Then o campo deve estar desabilitado para edição
+
+Scenario: Persistência de dados após edição
+    Given que alterei o tipo do restaurante “Gosto bom”
+    When eu atualizo a página de perfil do restaurante “Gosto bom”
+    Then o sistema deve exibir o novo tipo cadastrado
