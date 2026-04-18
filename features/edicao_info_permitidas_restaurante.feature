@@ -8,7 +8,6 @@ Scenario: Edição de informações permitidas
     And sou o proprietário do restaurante “Gosto bom”
     When eu altero o endereço e o horário de funcionamento
     Then as novas informações são salvas no banco de dados
-    Then novo then para os stakeholders!!!
 
 Scenario: Bloqueio de alteração de CNPJ
     Given que o restaurante “Gosto bom” já possui um “CNPJ” cadastrado
