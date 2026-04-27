@@ -14,8 +14,34 @@ def parse_body(request: HttpRequest) -> dict:
         return {}
 
 
-@require_http_methods(['POST'])
-def create_deliverer(request: HttpRequest) -> JsonResponse:
+@require_http_methods(['GET', 'POST'])
+def deliverers_collection(request: HttpRequest) -> JsonResponse:
+    if request.method == 'GET':
+        status_value = request.GET.get('status')
+        region = request.GET.get('region')
+
+        status = None
+        if status_value:
+            try:
+                status = DelivererStatus(status_value)
+            except ValueError:
+                return JsonResponse({'error': 'invalid status filter'}, status=400)
+
+        deliverers = deliverer_service.list_deliverers(
+            status=status, region=region)
+        return JsonResponse({
+            'items': [
+                {
+                    'id': str(deliverer.id),
+                    'name': deliverer.name,
+                    'phone': deliverer.phone,
+                    'region': deliverer.region,
+                    'status': deliverer.status.value,
+                }
+                for deliverer in deliverers
+            ]
+        })
+
     data = parse_body(request)
     name = data.get('name')
     phone = data.get('phone')
@@ -60,8 +86,14 @@ def assign_order(request: HttpRequest) -> JsonResponse:
     if not order_id or not region:
         return JsonResponse({'error': 'order_id and region are required'}, status=400)
 
+    deliverer_id = data.get('deliverer_id')
+
     try:
-        order = deliverer_service.assign_order(UUID(order_id), region)
+        order = deliverer_service.assign_deliverer(
+            UUID(order_id),
+            region,
+            UUID(deliverer_id) if deliverer_id else None,
+        )
         return JsonResponse({
             'order_id': str(order.id),
             'status': order.status.value,
@@ -73,8 +105,11 @@ def assign_order(request: HttpRequest) -> JsonResponse:
 
 @require_http_methods(['POST'])
 def reassign_order(request: HttpRequest, order_id: UUID) -> JsonResponse:
+    data = parse_body(request)
+    reason = data.get('reason', 'timeout')
+
     try:
-        order = deliverer_service.reassign_order(order_id)
+        order = deliverer_service.reassign_deliverer(order_id, reason=reason)
         return JsonResponse({
             'order_id': str(order.id),
             'status': order.status.value,

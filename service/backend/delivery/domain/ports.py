@@ -15,6 +15,10 @@ class DelivererRepository(ABC):
         pass
 
     @abstractmethod
+    def list_deliverers(self, status: Optional[str] = None, region: Optional[str] = None) -> list[Deliverer]:
+        pass
+
+    @abstractmethod
     def find_available_by_region(self, region: str, exclude_id: Optional[UUID] = None) -> Optional[Deliverer]:
         pass
 

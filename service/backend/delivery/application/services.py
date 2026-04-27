@@ -34,7 +34,17 @@ class DelivererService:
         )
         return self.deliverer_repo.save(updated)
 
-    def assign_order(self, order_id: UUID, region: str) -> Order:
+    def list_deliverers(
+        self,
+        status: Optional[DelivererStatus] = None,
+        region: Optional[str] = None,
+    ) -> list[Deliverer]:
+        return self.deliverer_repo.list_deliverers(
+            status=status.value if status else None,
+            region=region,
+        )
+
+    def assign_deliverer(self, order_id: UUID, region: str, deliverer_id: Optional[UUID] = None) -> Order:
         order = self.order_repo.get_by_id(order_id)
         if order is None:
             order = Order(id=order_id, region=region,
@@ -43,7 +53,18 @@ class DelivererService:
         if order.assigned_deliverer_id is not None:
             return order
 
-        deliverer = self.deliverer_repo.find_available_by_region(region)
+        if deliverer_id is not None:
+            deliverer = self.deliverer_repo.get_by_id(deliverer_id)
+            if deliverer is None:
+                raise ValueError('Deliverer not found')
+            if deliverer.region != region:
+                raise ValueError(
+                    'Deliverer region does not match order region')
+            if deliverer.status != DelivererStatus.AVAILABLE:
+                raise ValueError('Deliverer is not available')
+        else:
+            deliverer = self.deliverer_repo.find_available_by_region(region)
+
         if deliverer is None:
             raise ValueError('No available deliverer in region')
 
@@ -64,7 +85,10 @@ class DelivererService:
         )
         return self.order_repo.save(assigned)
 
-    def reassign_order(self, order_id: UUID) -> Order:
+    def reassign_deliverer(self, order_id: UUID, reason: str = 'timeout') -> Order:
+        if reason not in ('timeout', 'refused'):
+            raise ValueError('Invalid reassign reason')
+
         order = self.order_repo.get_by_id(order_id)
         if order is None:
             raise ValueError('Order not found')

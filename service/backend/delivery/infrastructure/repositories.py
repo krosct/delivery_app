@@ -39,6 +39,24 @@ class DelivererRepositoryImpl(DelivererRepository):
             status=DelivererStatus(model.status),
         )
 
+    def list_deliverers(self, status: Optional[str] = None, region: Optional[str] = None) -> list[Deliverer]:
+        query = DelivererModel.objects.all()
+        if status:
+            query = query.filter(status=status)
+        if region:
+            query = query.filter(region=region)
+
+        return [
+            Deliverer(
+                id=model.id,
+                name=model.name,
+                phone=model.phone,
+                region=model.region,
+                status=DelivererStatus(model.status),
+            )
+            for model in query.order_by('name')
+        ]
+
     def find_available_by_region(self, region: str, exclude_id: Optional[UUID] = None) -> Optional[Deliverer]:
         query = DelivererModel.objects.filter(
             region=region, status=DelivererStatus.AVAILABLE.value)
