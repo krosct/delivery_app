@@ -1,70 +1,96 @@
-# delivery_app
+# Delivery App - Sistema de Gestão e Pedidos
 
-## Visão geral
-Base de um projeto de delivery com arquitetura hexagonal / clean architecture, backend em Django e testes BDD com `pytest-bdd`.
+## Visão Geral Técnica e de Negócios
 
-O objetivo desta base é permitir que o time comece a desenvolver rapidamente com uma estrutura clara, separação de responsabilidades e o primeiro recurso de entregadores.
+O **Delivery App** é uma plataforma abrangente projetada para conectar clientes a restaurantes, facilitando o processo de pedidos, acompanhamento de entregas e gestão operacional para os lojistas e entregadores. O sistema atua como um intermediário eficiente, garantindo uma experiência fluida de ponta a ponta.
 
-## Estrutura do projeto
-- `service/backend/`: código do backend Django
-- `app/frontend/`: frontend Vite + React (lista funcional de entregadores)
-- `docker-compose.yml`: orquestra o backend Django e PostgreSQL
-- `.env.example`: variáveis de ambiente para desenvolvimento
-- `docs/`: source of truth de arquitetura, design system e BDD
+### Escopo Geral
+O ecossistema é dividido em seis domínios principais:
+1. **Restaurantes:** Gestão do estabelecimento e recebimento de pedidos.
+2. **Entregadores:** Gestão de rotas, avaliação e status de entrega.
+3. **Pedidos:** Core da aplicação, controlando desde o carrinho de compras até o histórico de pedidos.
+4. **Cardápio:** Vitrine de produtos, categorias e links personalizados.
+5. **Pagamento:** Gestão de métodos, promoções e emissão de comprovantes.
+6. **Clientes:** Perfil do usuário, estatísticas de consumo e recuperação de acesso.
 
-## Documentação oficial
-- `docs/architecture.md`
-- `docs/design-system.md`
-- `docs/bdd-guidelines.md`
-- `docs/deliverers.md`
+## Tabela de Responsabilidade por Domínios
 
-## Como rodar localmente
-1. Copie as variáveis de ambiente:
-   ```bash
-   cp .env.example .env
-   ```
-2. Inicie os serviços:
-   ```bash
-   docker compose up --build
-   ```
-3. A API estará disponível em `http://localhost:8000`
+| Domínio | Responsável(is) | Papel / Foco Principal |
+|---------|-----------------|------------------------|
+| Restaurantes | Gabriel | Cadastro, manutenção e gestão de notificações. |
+| Entregadores | Matheus | Roteamento, avaliações e alertas de entrega. |
+| Pedidos | Matheus Braga | Carrinho, status, estimativas e cancelamento. |
+| Cardápio | Pedro | Gestão de itens, categorias e vitrine web. |
+| Pagamento | Karol | Gateways, métodos, promoções e e-mails (comprovantes). |
+| Clientes | João e Rômulo | Gestão de perfis, histórico e analytics do cliente. |
 
-### Endpoints de exemplo
-- `GET /api/deliverers/?status=AVAILABLE&region=Zona Sul`
-- `POST /api/deliverers/`
-- `PATCH /api/deliverers/{deliverer_id}/status/`
-- `POST /api/orders/assign/` (automática ou manual com `deliverer_id`)
-- `POST /api/orders/{order_id}/reassign/` (com `reason`: `timeout` ou `refused`)
+## Arquitetura Tecnológica
 
-### Frontend local
-O frontend inicial está em `app/frontend`.
-```bash
-cd app/frontend
-npm install
-npm run dev
+**Stack Principal (Atual):**
+- **Frontend:** ReactJS (com TypeScript e Vite)
+- **Backend:** NodeJS (Express/NestJS) - *Nota: Transição da estrutura legada em Python/Django*
+- **Bancos de Dados:** MySQL (Relacional) e Redis (Cache e Filas)
+
+**Tecnologias Adicionais Sugeridas (Cruciais):**
+- **RabbitMQ ou Apache Kafka:** Para mensageria assíncrona entre os microserviços (ex: notificação de pedidos e pagamentos).
+- **Socket.io / WebSockets:** Essencial para rastreamento de entregadores em tempo real e notificações live para restaurantes.
+- **Docker & Kubernetes:** Para orquestração escalável.
+- **Elasticsearch:** Para otimizar a busca de restaurantes e pratos de forma rápida e inteligente.
+- **AWS S3 / MinIO:** Para armazenamento de imagens de cardápios e avatares.
+
+## Estrutura do Projeto (Atual e Futura)
+
+Baseado nas melhores práticas de Engenharia de Software, TDD e BDD:
+
+```text
+/delivery_app
+├── app/frontend/          # Aplicação SPA em ReactJS
+├── service/backend/       # APIs em NodeJS (Organizado por domínios/DDD)
+├── docs/                  # Documentação de arquitetura (ADRs, Diagramas)
+├── features/              # Especificações BDD (Arquivos .feature por domínio)
+├── docker-compose.yml     # Orquestração local
+└── README.md              # Este documento central
 ```
 
-## Como rodar os testes
-Entre na pasta do backend e execute:
+## Como Executar Localmente via Docker
+
+1. **Pré-requisitos:** Certifique-se de ter o Docker e o Docker Compose instalados.
+2. **Construir e Iniciar os Contêineres:**
+   ```bash
+   docker-compose up --build -d
+   ```
+3. **Verificar os Serviços:**
+   - Frontend (React): `http://localhost:5173`
+   - Backend (NodeJS): `http://localhost:3000`
+   - Banco de Dados (MySQL): Porta `3306`
+   - Cache (Redis): Porta `6379`
+4. **Parar a Aplicação:**
+   ```bash
+   docker-compose down
+   ```
+
+## Execução da Suíte de Testes (BDD)
+
+Os testes são orientados a comportamento (BDD) baseados nos cenários `.feature`.
+No backend (assumindo Jest/Cucumber-js para NodeJS):
 ```bash
-cd service/backend
-pytest
+# Executa a suíte completa de testes
+docker-compose exec backend npm run test:e2e
+
+# Executa testes de um domínio específico
+docker-compose exec backend npm run test:e2e -- --tags "@restaurante"
 ```
 
-## Como adicionar uma nova feature
-1. Crie um novo domínio dentro de `service/backend/delivery/domain/` ou extraia um app para `service/backend/<feature>`.
-2. Adicione portos (`ports.py`) e implementação de repositórios em `infrastructure/repositories.py`.
-3. Crie regras de aplicação em `application/services.py`.
-4. Exponha a API em `http/views.py` e registre as rotas em `http/urls.py`.
-5. Adicione cenários BDD em `service/backend/tests/features/` e passos em `service/backend/tests/steps/`.
+No frontend (assumindo Cypress):
+```bash
+docker-compose exec frontend npm run cypress:run
+```
 
-## Boas práticas de colaboração
-- Use branches pequenas e focadas por feature: `feature/deliverers`, `feature/orders`, `fix/tests`
-- Escreva commits claros: `feat(delivery): add assign order endpoint`
-- Inclua no PR:
-  - descrição da mudança
-  - exemplos de uso e chamadas de API
-  - notas de testes executados
+## Resultados Esperados por Domínio (Fim do Projeto)
 
-## Observações
-Esta base foi montada para ser simples, clara e facilmente extensível pelo time. A arquitetura deve ser replicada em novos domínios conforme o projeto crescer.
+- **Restaurantes:** Sistema capaz de cadastrar, remover e atualizar perfis; painel em tempo real para recebimento de notificações de novos pedidos.
+- **Entregadores:** Gestão de frota eficiente, com métricas de avaliação e sistema robusto de dispatch (notificação de novas entregas).
+- **Pedidos:** Fluxo de carrinho livre de atritos, precisão no cálculo de ETA (Tempo Estimado de Entrega), e funcionalidades seguras de cancelamento e visualização de histórico.
+- **Cardápio:** Gestor de cardápios flexível com suporte a categorias dinâmicas e capacidade de gerar links públicos para divulgação via redes sociais.
+- **Pagamento:** Integração com múltiplos meios (cartão, Pix), motor de promoções/cupons operante e sistema confiável de envio de e-mails transacionais (comprovantes).
+- **Clientes:** Dashboard self-service para clientes gerenciarem seus dados, recuperarem credenciais e visualizarem estatísticas mensais de gastos e consumo.
