@@ -3,7 +3,10 @@ Funcionalidade: Validação de Acesso do Restaurante
   Quero acessar o painel do meu restaurante
   Para que eu possa gerenciar minhas propostas
 
-Scenario: Validação de acesso ao painel de propostas
-    Given que concluí o autocadastro do restaurante “Gosto bom”
+  Background:
+    Given que estou logado no sistema
+
+  Scenario: Acesso ao painel de propostas
+    Given que concluí o cadastro do restaurante "Gosto bom"
     When eu acesso o painel principal
-    Then visualizo a opção de cadastrar novas propostas
+    Then eu devo visualizar a opção de "Cadastrar propostas"
