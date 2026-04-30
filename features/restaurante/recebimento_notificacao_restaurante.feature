@@ -32,6 +32,6 @@ Funcionalidade: Recebimento de notificação do pedido
     Then a lista de pedidos deve ser atualizada automaticamente com esse novo pedido
 
   Scenario: Histórico de alertas recebidos
-    Given que o restaurante recebeu múltiplos pedidos simultâneos
+    Given que o restaurante recebeu pelo menos um pedido
     When eu acesso o log de notificações
-    Then cada pedido deve ser exibido com detalhes para ação
+    Then cada pedido deve ser exibido com "Aceitar" e "Rejeitar" como opções de ação
