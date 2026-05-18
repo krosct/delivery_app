@@ -27,7 +27,7 @@ def no_deliverers():
 @given(parsers.parse('um entregador existente com nome "{name}" e regiao "{region}"'))
 def existing_deliverer(client: Client, context: dict, name: str, region: str):
     response = client.post(
-        '/api/deliverers/',
+        '/api/v1/delivery/deliverers/',
         data=json.dumps(
             {'name': name, 'phone': '11999999999', 'region': region}),
         content_type='application/json',
@@ -43,13 +43,13 @@ def deliverers_with_different_statuses(client: Client):
     DelivererModel.objects.all().delete()
 
     first = client.post(
-        '/api/deliverers/',
+        '/api/v1/delivery/deliverers/',
         data=json.dumps(
             {'name': 'Ana', 'phone': '11111111111', 'region': 'Zona Sul'}),
         content_type='application/json',
     )
     second = client.post(
-        '/api/deliverers/',
+        '/api/v1/delivery/deliverers/',
         data=json.dumps(
             {'name': 'Bruno', 'phone': '22222222222', 'region': 'Zona Sul'}),
         content_type='application/json',
@@ -72,7 +72,7 @@ def pending_order(context: dict, region: str):
 @given(parsers.parse('um entregador disponivel na regiao "{region}"'))
 def available_deliverer(client: Client, context: dict, region: str):
     response = client.post(
-        '/api/deliverers/',
+        '/api/v1/delivery/deliverers/',
         data=json.dumps(
             {'name': 'Carlos', 'phone': '11988888888', 'region': region}),
         content_type='application/json',
@@ -86,7 +86,7 @@ def available_deliverer(client: Client, context: dict, region: str):
 @given(parsers.parse('um entregador com nome "{name}" disponivel na regiao "{region}"'))
 def available_named_deliverer(client: Client, context: dict, name: str, region: str):
     response = client.post(
-        '/api/deliverers/',
+        '/api/v1/delivery/deliverers/',
         data=json.dumps(
             {'name': name, 'phone': '11977777777', 'region': region}),
         content_type='application/json',
@@ -105,7 +105,7 @@ def no_available_deliverer_in_region(region: str):
 @given(parsers.parse('um entregador com nome "{name}" ocupado na regiao "{region}"'))
 def occupied_named_deliverer(client: Client, context: dict, name: str, region: str):
     response = client.post(
-        '/api/deliverers/',
+        '/api/v1/delivery/deliverers/',
         data=json.dumps(
             {'name': name, 'phone': '11966666666', 'region': region}),
         content_type='application/json',
@@ -120,7 +120,7 @@ def occupied_named_deliverer(client: Client, context: dict, name: str, region: s
 @given(parsers.parse('uma ordem em entrega na regiao "{region}" atribuida ao entregador "{name}"'))
 def in_delivery_order(client: Client, context: dict, region: str, name: str):
     response = client.post(
-        '/api/deliverers/',
+        '/api/v1/delivery/deliverers/',
         data=json.dumps(
             {'name': name, 'phone': '11955555555', 'region': region}),
         content_type='application/json',
@@ -147,7 +147,7 @@ def in_delivery_order(client: Client, context: dict, region: str, name: str):
 @given(parsers.parse('outro entregador disponivel na regiao "{region}"'))
 def second_available_deliverer(client: Client, context: dict, region: str):
     response = client.post(
-        '/api/deliverers/',
+        '/api/v1/delivery/deliverers/',
         data=json.dumps(
             {'name': 'Mario', 'phone': '11944444444', 'region': region}),
         content_type='application/json',
@@ -160,7 +160,7 @@ def second_available_deliverer(client: Client, context: dict, region: str):
 @when(parsers.parse('o cliente registra um entregador com nome "{name}" telefone "{phone}" regiao "{region}"'))
 def register_deliverer(client: Client, context: dict, name: str, phone: str, region: str):
     response = client.post(
-        '/api/deliverers/',
+        '/api/v1/delivery/deliverers/',
         data=json.dumps({'name': name, 'phone': phone, 'region': region}),
         content_type='application/json',
     )
@@ -172,7 +172,7 @@ def register_deliverer(client: Client, context: dict, name: str, phone: str, reg
 def update_deliverer_status(client: Client, context: dict, status: str):
     deliverer_id = context['deliverer']['id']
     response = client.patch(
-        f'/api/deliverers/{deliverer_id}/status/',
+        f'/api/v1/delivery/deliverers/{deliverer_id}/status/',
         data=json.dumps({'status': status}),
         content_type='application/json',
     )
@@ -182,7 +182,7 @@ def update_deliverer_status(client: Client, context: dict, status: str):
 
 @when(parsers.parse('a listagem de entregadores for solicitada com filtro de status "{status}"'))
 def list_deliverers_by_status(client: Client, context: dict, status: str):
-    response = client.get(f'/api/deliverers/?status={status}')
+    response = client.get(f'/api/v1/delivery/deliverers/?status={status}')
     assert response.status_code == 200
     context['response'] = response.json()
 
@@ -191,7 +191,7 @@ def list_deliverers_by_status(client: Client, context: dict, status: str):
 def assign_order_automatically(client: Client, context: dict):
     order = context['order']
     response = client.post(
-        '/api/orders/assign/',
+        '/api/v1/delivery/orders/assign/',
         data=json.dumps({'order_id': order['id'], 'region': order['region']}),
         content_type='application/json',
     )
@@ -204,7 +204,7 @@ def assign_order_manually(client: Client, context: dict, name: str):
     order = context['order']
     deliverer_id = context['deliverers_by_name'][name]['id']
     response = client.post(
-        '/api/orders/assign/',
+        '/api/v1/delivery/orders/assign/',
         data=json.dumps(
             {'order_id': order['id'], 'region': order['region'], 'deliverer_id': deliverer_id}),
         content_type='application/json',
@@ -217,7 +217,7 @@ def assign_order_manually(client: Client, context: dict, name: str):
 def reassign_order(client: Client, context: dict, reason: str):
     order_id = context['order']['id']
     response = client.post(
-        f'/api/orders/{order_id}/reassign/',
+        f'/api/v1/delivery/orders/{order_id}/reassign/',
         data=json.dumps({'reason': reason}),
         content_type='application/json',
     )

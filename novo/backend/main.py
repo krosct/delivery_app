@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from core.config import settings
 from modulos.restaurante.rotas import router as restaurante_router
 from modulos.restaurante.controle import RestauranteControle
+from modulos.delivery.rotas import router as delivery_router
 import logging
 from apscheduler.schedulers.background import BackgroundScheduler
 
@@ -32,6 +33,7 @@ scheduler = BackgroundScheduler()
 
 # Inclusão das rotas modulares
 app.include_router(restaurante_router, prefix=settings.API_V1_STR)
+app.include_router(delivery_router, prefix=settings.API_V1_STR)
 
 @app.get("/")
 async def root():
