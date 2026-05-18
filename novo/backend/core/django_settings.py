@@ -28,12 +28,8 @@ ROOT_URLCONF = 'core.urls'
 # Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME', 'delivery_db_test'),
-        'USER': os.getenv('DB_USER', 'delivery_user'),
-        'PASSWORD': os.getenv('DB_PASSWORD', 'delivery_pass'),
-        'HOST': os.getenv('DB_HOST', 'localhost'),
-        'PORT': os.getenv('DB_PORT', 5432),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': ':memory:',  # In-memory database for tests
     }
 }
 

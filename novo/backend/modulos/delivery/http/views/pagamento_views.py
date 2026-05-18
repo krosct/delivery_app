@@ -1,4 +1,5 @@
-#TO-DO from rest_framework.views import APIView
+# TODO: Payment views need refactoring for new architecture
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from modulos.delivery.infrastructure.models.pagamento_model import MetodoPagamento, Cupom, TransacaoPagamento

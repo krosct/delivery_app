@@ -7,8 +7,12 @@ from pathlib import Path
 project_root = Path(__file__).resolve().parent.parent.parent
 novo_backend = project_root / "novo" / "backend"
 
+# Add to sys.path with novo_backend as the PRIMARY path (index 0)
 sys.path.insert(0, str(novo_backend))
-sys.path.insert(0, str(project_root))
+sys.path.insert(1, str(project_root))
+
+# Set PYTHONPATH environment variable
+os.environ['PYTHONPATH'] = f"{novo_backend}:{project_root}"
 
 # Setup Django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.django_settings")
