@@ -4,28 +4,27 @@ Feature: Status Operacional do Restaurante
   Para garantir que os pedidos só sejam recebidos dentro do horário de funcionamento
 
   Background:
-    Given que estou logado no sistema
+    Given que o endpoint de "restaurantes" está "disponível"
+    And o "restaurante" cujo "id" é "123" existe na tabela "restaurantes" do banco de dados
 
   Scenario: Fechamento automático por horário
-    Given que o horário atual está fora do intervalo de funcionamento do restaurante "Gosto bom"
-    When o cliente visualiza a lista de restaurantes
-    Then o restaurante "Gosto bom" deve aparecer com o status "Fechado"
+    When o horário atual está "fora" do intervalo de "funcionamento do restaurante" "Gosto bom":
+    Then o sistema deve atualizar o "restaurante" de id "123" com o novo "status" para "Fechado" na tabela "restaurantes" do banco de dados
 
-  Scenario: Bloqueio de pedidos fora do horário
-    Given que o restaurante está com status "Fechado"
-    When um cliente tenta realizar um pedido
-    Then o sistema deve exibir "Restaurante indisponível"
+  Scenario: Abertura automática por horário
+    When o horário atual está "dentro" do intervalo de "funcionamento do restaurante" "Gosto bom":
+    Then o sistema deve atualizar o "restaurante" de id "123" com o novo "status" para "Aberto" na tabela "restaurantes" do banco de dados
 
-  Scenario: Reabertura baseada no cronograma
-    Given que o horário de abertura do restaurante chegou
-    When o sistema processa a atualização de status
-    Then o restaurante deve ficar disponível para receber pedidos
+  Scenario: Mudança de status manual para aberto
+    When eu envio uma requisição ao endpoint de "edição de restaurante" com os dados:
+      | id  | campo  | novo_valor |
+      | 123 | status | Aberto     |
+    Then o sistema deve atualizar o "restaurante" de id "123" com o novo "status" para "Aberto" na tabela "restaurantes" do banco de dados
+    And o sistema responde com o código HTTP "200"
 
-  Scenario: Mudança manual de status
-    Given que eu altero a chave de status para "Fechado" no painel
-    Then o sistema deve exibir "Restaurante fechado" e interromper o recebimento de pedidos
-
-  Scenario: Verificação de status na finalização do pedido
-    Given que um cliente iniciou a montagem de um carrinho
-    When o restaurante muda para "Fechado" antes do checkout ser concluído
-    Then o sistema deve informar "Restaurante não aceita mais pedidos"
+  Scenario: Mudança de status manual para fechado
+    When eu envio uma requisição ao endpoint de "edição de restaurante" com os dados:
+      | id  | campo  | novo_valor |
+      | 123 | status | Fechado    |
+    Then o sistema deve atualizar o "restaurante" de id "123" com o novo "status" para "Fechado" na tabela "restaurantes" do banco de dados
+    And o sistema responde com o código HTTP "200"

@@ -4,17 +4,19 @@ Feature: Edição de Informações do Restaurante
   Para manter os dados do meu estabelecimento atualizados
 
   Background:
-    Given que estou logado no sistema
-    And que estou na página de perfil do restaurante "Gosto bom"
+    Given que o endpoint de "edição de restaurante" está "disponível"
+    And que eu sou o proprietário do "restaurante" de id "123"
+    And o "restaurante" cujo "id" é "123" existe na tabela "restaurantes" do banco de dados
 
   Scenario: Edição de informações permitidas
-    When eu altero as seguintes informações:
-      | campo                    | novo_valor  |
-      | endereço                 | Rua B, 20   |
-      | horário de funcionamento | 09:00-23:00 |
-    Then as informações devem ser atualizadas com sucesso
+    When eu envio uma requisição ao endpoint de "edição de restaurante" com os dados:
+      | id  | campo | novo_valor      |
+      | 123 | nome  | Gosto Muito Bom |
+    Then o sistema deve atualizar o "restaurante" de id "123" com o novo "nome" para "Gosto Muito Bom" na tabela "restaurantes" do banco de dados
+    And o sistema responde com o código HTTP "200"
 
-  Scenario: Persistência de dados após edição
-    Given que alterei o tipo do restaurante para "Pizzaria"
-    When eu atualizo a página de perfil do restaurante
-    Then o sistema deve exibir o novo tipo "Pizzaria"
+  Scenario: Edição de informações proibidas
+    When eu envio uma requisição ao endpoint de "edição de restaurante" com os dados:
+      | id  | campo | novo_valor         |
+      | 123 | cnpj  | 00.000.000/0001-00 |
+    Then o sistema responde com o código HTTP "400"

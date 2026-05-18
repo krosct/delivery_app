@@ -4,15 +4,25 @@ Feature: Recebimento de notificação do pedido
   Para poder confeccioná-los e entregá-los
 
   Background:
-    Given que o restaurante está logado como "dono" no sistema
-    And que o restaurante está conectado "via Socket"
+    Given que o endpoint de "pedidos" está "disponível"
+    And o "restaurante" cujo "id" é "123" existe na tabela "restaurantes" do banco de dados
+    And eu sou o proprietário do restaurante de id "123"
+    And estou autenticado no sistema
+    And o "pedido" cujo "id" é "987" existe na tabela "pedidos" do banco de dados
+    And o "restaurante" cujo "id" é "123" está "aberto"
+    And eu recebo uma requisição do sistema informando "novo pedido" com id "987"
 
-  Scenario: Aceite de pedido via notificação
-    Given que um aviso de novo pedido apareceu na interface
-    When eu seleciono a opção "Aceitar"
-    Then o status do pedido deve ser atualizado para "Aceito"
+  Scenario: Aceite de pedido
+    When eu envio um requisição de ao endpoint "pedidos" com os dados:
+      | id_pedido  | id_restaurante | aceitacao  |
+      | 987        | 123            | aceito     |
+    Then o sistema deve atualizar o "pedido" de id "987" com o novo "status" para "Em preparo" na tabela "pedidos" do banco de dados
+    And o sistema deve atualizar o "pedido" de id "987" com o novo "id_restaurante" para "123" na tabela "pedidos" do banco de dados
+    And o sistema responde com o código HTTP "200"
 
-  Scenario: Recusa de pedido via notificação
-    Given que uma notificação de pedido está visível
-    When eu seleciono a opção "Recusar"
-    Then a notificação deve ser fechada e o pedido cancelado
+  Scenario: Recusa de pedido
+    When eu envio um requisição de ao endpoint "pedidos" com os dados:
+      | id_pedido  | id_restaurante | aceitacao  |
+      | 987        | 123            | rejeitado  |
+    Then o sistema deve atualizar o "pedido" de id "987" com o novo "status" para "Rejeitado" na tabela "pedidos" do banco de dados
+    And o sistema responde com o código HTTP "200"
