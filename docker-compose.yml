@@ -1,36 +1,61 @@
-version: "3.9"
-
 services:
+  db:
+    image: mysql:latest
+    container_name: ${DB_NAME}
+    restart: always
+    environment:
+      - TZ=${TZ}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${SECRET_KEY}
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    volumes:
+      - ./database/db_files:/var/lib/mysql
+      - ./database/esquemas:/docker-entrypoint-initdb.d
+    networks:
+      - delivery_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 5
+
   backend:
     build:
-      context: ./service/backend
+      context: ./backend
       dockerfile: Dockerfile
-    volumes:
-      - ./service/backend:/app
+    container_name: ${BACKEND_NAME}
+    restart: always
+    environment:
+      - DB_HOST=db
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
     ports:
       - "8000:8000"
-    environment:
-      DJANGO_SETTINGS_MODULE: backend.settings.dev
-      POSTGRES_DB: delivery
-      POSTGRES_USER: delivery
-      POSTGRES_PASSWORD: delivery
-      POSTGRES_HOST: postgres
-      POSTGRES_PORT: "5432"
     depends_on:
-      - postgres
-    command: /bin/sh -c "python manage.py makemigrations --noinput && python manage.py migrate --noinput && python manage.py runserver 0.0.0.0:8000"
+      db:
+        condition: service_healthy
+    networks:
+      - delivery_network
 
-  postgres:
-    image: postgres:15
-    restart: unless-stopped
+  frontend:
+    image: node:jod-alpine
+    container_name: ${FRONTEND_NAME}
+    restart: always
+    working_dir: /app
     environment:
-      POSTGRES_DB: delivery
-      POSTGRES_USER: delivery
-      POSTGRES_PASSWORD: delivery
-    ports:
-      - "5432:5432"
+      - TZ=${TZ}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./frontend:/app
+    ports:
+      - "3000:3000"
+    command: sh -c "npm install && npm run dev"
+    networks:
+      - delivery_network
 
-volumes:
-  postgres_data: {}
+networks:
+  delivery_network:
+    driver: bridge

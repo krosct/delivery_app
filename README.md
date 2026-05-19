@@ -1,4 +1,4 @@
-# delivery_app
+# 😋 Yummicious 😋
 
 ## Visão geral
 Base de um projeto de delivery com arquitetura hexagonal / clean architecture, backend em Django e testes BDD com `pytest-bdd`.
