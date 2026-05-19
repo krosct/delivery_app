@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import Badge from './components/Badge'
-import Button from './components/Button'
-import Card from './components/Card'
+import Badge from './src/componentes/Badge'
+import Button from './src/componentes/Button'
+import Card from './src/componentes/Card'
 
 type DelivererStatus = 'AVAILABLE' | 'OCCUPIED' | 'OFFLINE'
 
