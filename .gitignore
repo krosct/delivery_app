@@ -495,3 +495,4 @@ sketch
 # End of https://www.toptal.com/developers/gitignore/api/python,react,node,nextjs,django,redis
 
 .rooignore
+db_files/
