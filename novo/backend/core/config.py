@@ -7,7 +7,12 @@ class Settings(BaseSettings):
     DB_PORT: int = int(os.getenv("DB_PORT", 3306))
     DB_USER: str = os.getenv("DB_USER", "delivery_user")
     DB_PASSWORD: str = os.getenv("DB_PASSWORD", "delivery_pass")
-    DB_NAME: str = os.getenv("DB_DATABASE", "yummicious_db")
+    DB_NAME: str = os.getenv("DB_NAME", "yummicious_db")
+
+    # Configurações Gerais
+    BACKEND_NAME: str = os.getenv("BACKEND_NAME", "yummicious_back")
+    FRONTEND_NAME: str = os.getenv("FRONTEND_NAME", "yummicious_front")
+    TZ: str = os.getenv("TZ", "America/Sao_Paulo")
 
     # Configurações de Segurança
     SECRET_KEY: str = os.getenv("SECRET_KEY", "super-secret-key-change-it-in-production")
