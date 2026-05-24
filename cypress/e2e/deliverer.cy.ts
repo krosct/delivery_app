@@ -1,48 +1,22 @@
+import { DelivererView } from '../support/views/delivererView'
+
 describe('GUI de entregadores', () => {
-  it('cadastra um entregador e atualiza a lista', () => {
-    const deliverers = [
-      {
-        id: '1',
-        name: 'Ana',
-        phone: '11999999999',
-        region: 'Zona Sul',
-        status: 'AVAILABLE',
-      },
-    ]
+  const cases = [
+    { name: 'Ana', phone: '11999999999', region: 'Zona Sul', id: '1' },
+    { name: 'Bruno', phone: '11888888888', region: 'Centro', id: '2' },
+  ]
 
-    cy.intercept('GET', '/api/deliverers/**', (req) => {
-      req.reply({ items: deliverers })
-    }).as('loadDeliverers')
+  cases.forEach((deliverer) => {
+    it(`cadastra ${deliverer.name} e atualiza a lista`, () => {
+      const view = new DelivererView()
 
-    cy.intercept('POST', '/api/deliverers/', (req) => {
-      deliverers.splice(0, deliverers.length, {
-        id: '1',
-        name: req.body.name,
-        phone: req.body.phone,
-        region: req.body.region,
-        status: 'AVAILABLE',
-      })
+      view.stubList([{ ...deliverer, status: 'AVAILABLE' }])
+      view.stubCreate({ ...deliverer, status: 'AVAILABLE' })
+      view.visit()
 
-      req.reply({
-        id: '1',
-        name: req.body.name,
-        phone: req.body.phone,
-        region: req.body.region,
-        status: 'AVAILABLE',
-      })
-    }).as('createDeliverer')
-
-    cy.visit('/')
-    cy.wait('@loadDeliverers')
-
-    cy.get('[data-cy="register-deliverer"]').within(() => {
-      cy.get('[data-cy="deliverer-name"]').type('Ana')
-      cy.get('[data-cy="deliverer-phone"]').type('11999999999')
-      cy.get('[data-cy="deliverer-region"]').type('Zona Sul')
-      cy.get('[data-cy="submit-deliverer"]').click()
+      view.fillForm(deliverer)
+      view.submit()
+      view.shouldSeeDeliverer(deliverer.name)
     })
-
-    cy.wait('@createDeliverer')
-    cy.contains('Ana').should('be.visible')
   })
 })

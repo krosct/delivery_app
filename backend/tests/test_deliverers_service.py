@@ -9,7 +9,8 @@ from modulos.delivery.infrastructure.memory_repositories import (
 
 
 def test_deliverer_status_available_to_occupied():
-    service = DelivererService(InMemoryDelivererRepository(), InMemoryOrderRepository())
+    service = DelivererService(
+        InMemoryDelivererRepository(), InMemoryOrderRepository())
 
     deliverer = service.register_deliverer('Ana', '11999999999', 'Zona Sul')
     updated = service.update_status(deliverer.id, DelivererStatus.OCCUPIED)
@@ -18,7 +19,8 @@ def test_deliverer_status_available_to_occupied():
 
 
 def test_assigns_deliverer_automatically_in_same_region():
-    service = DelivererService(InMemoryDelivererRepository(), InMemoryOrderRepository())
+    service = DelivererService(
+        InMemoryDelivererRepository(), InMemoryOrderRepository())
     deliverer = service.register_deliverer('Ana', '11999999999', 'Zona Sul')
 
     order = service.assign_deliverer(uuid4(), 'Zona Sul')

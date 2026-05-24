@@ -18,10 +18,14 @@ class DelivererStore {
     this.deliverers = []
   }
 
-  create(deliverer: Omit<Deliverer, 'status'>): Deliverer {
-    const created: Deliverer = { ...deliverer, status: 'AVAILABLE' }
+  create(deliverer: Omit<Deliverer, 'status'>, status: DelivererStatus = 'AVAILABLE'): Deliverer {
+    const created: Deliverer = { ...deliverer, status }
     this.deliverers.push(created)
     return created
+  }
+
+  count() {
+    return this.deliverers.length
   }
 }
 
@@ -39,19 +43,14 @@ defineFeature(feature, (test) => {
       store.clear()
     })
 
-    when(
-      'eu cadastro um entregador com nome "Ana" telefone "11999999999" regiao "Zona Sul"',
-      () => {
-        response = store.create({
-          name: 'Ana',
-          phone: '11999999999',
-          region: 'Zona Sul',
-        })
-      },
-    )
+    when(/^eu cadastro um entregador com nome "([^"]+)" telefone "([^"]+)" regiao "([^"]+)"$/, (name: string, phone: string, region: string) => {
+      response = store.create({ name, phone, region })
+    })
 
-    then('o entregador "Ana" deve ficar com status "AVAILABLE"', () => {
-      expect(response?.status).toBe('AVAILABLE')
+    then(/^o entregador "([^"]+)" deve ficar com status "([^"]+)"$/, (name: string, status: DelivererStatus) => {
+      expect(response?.name).toBe(name)
+      expect(response?.status).toBe(status)
+      expect(store.count()).toBe(1)
     })
   })
 })

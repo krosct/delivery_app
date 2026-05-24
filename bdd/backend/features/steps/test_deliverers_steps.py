@@ -66,7 +66,8 @@ def deliverers_with_different_statuses(client: TestClient, context: dict):
     )
     assert patch_response.status_code == 200
     context['deliverers_by_name']['Ana'] = first.json()
-    context['deliverers_by_name']['Bruno'] = patch_response.json() | {'name': 'Bruno', 'region': 'Zona Sul'}
+    context['deliverers_by_name']['Bruno'] = patch_response.json() | {
+        'name': 'Bruno', 'region': 'Zona Sul'}
 
 
 @given(parsers.parse('uma ordem pendente na regiao "{region}"'))
@@ -140,7 +141,8 @@ def in_delivery_order(client: TestClient, context: dict, region: str, name: str)
     deliverer = response.json()
     assign_response = client.post(
         '/api/orders/assign/',
-        json={'order_id': str(uuid4()), 'region': region, 'deliverer_id': deliverer['id']},
+        json={'order_id': str(uuid4()), 'region': region,
+              'deliverer_id': deliverer['id']},
     )
     assert assign_response.status_code == 200
     order = assign_response.json()
@@ -208,7 +210,8 @@ def assign_order_manually(client: TestClient, context: dict, name: str):
     deliverer_id = context['deliverers_by_name'][name]['id']
     response = client.post(
         '/api/orders/assign/',
-        json={'order_id': order['id'], 'region': order['region'], 'deliverer_id': deliverer_id},
+        json={'order_id': order['id'], 'region': order['region'],
+              'deliverer_id': deliverer_id},
     )
     context['status_code'] = response.status_code
     context['response'] = response.json()
@@ -255,7 +258,8 @@ def assert_order_status(context: dict, status: str):
 @then('o entregador deve ser marcado como "OCCUPIED"')
 def assert_deliverer_occupied(context: dict):
     payload = context['response']
-    deliverer = deliverer_service.deliverer_repo.get_by_id(UUID(payload['assigned_deliverer_id']))
+    deliverer = deliverer_service.deliverer_repo.get_by_id(
+        UUID(payload['assigned_deliverer_id']))
     assert deliverer.status == DelivererStatus.OCCUPIED
 
 

@@ -1,6 +1,11 @@
 Feature: GUI de entregadores
 
-  Scenario: cadastrar entregador com sucesso
+  Scenario Outline: cadastrar entregador com sucesso
     Given eu estou na tela de entregadores
-    When eu cadastro o entregador "Ana"
-    Then vejo "Ana" na lista de entregadores
+    When eu cadastro o entregador "<name>"
+    Then vejo "<name>" na lista de entregadores
+
+    Examples:
+      | name  |
+      | Ana   |
+      | Bruno |
