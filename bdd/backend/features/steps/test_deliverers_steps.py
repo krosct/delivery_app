@@ -228,31 +228,31 @@ def reassign_order(client: TestClient, context: dict, reason: str):
     context['response'] = response.json()
 
 
-# @then(parsers.parse('o entregador "{name}" deve ser criado com status "{status}" na regiao "{region}"'))
-# def assert_deliverer_created(context: dict, name: str, status: str, region: str):
-#     payload = context['response']
-#     assert payload['name'] == name
-#     assert payload['status'] == status
-#     assert payload['region'] == region
+@then(parsers.parse('o entregador "{name}" deve ser criado com status "{status}" na regiao "{region}"'))
+def assert_deliverer_created(context: dict, name: str, status: str, region: str):
+    payload = context['response']
+    assert payload['name'] == name
+    assert payload['status'] == status
+    assert payload['region'] == region
 
 
-# @then(parsers.parse('o entregador deve ter status "{status}"'))
-# def assert_deliverer_status(context: dict, status: str):
-#     payload = context['response']
-#     assert payload['status'] == status
+@then(parsers.parse('o entregador deve ter status "{status}"'))
+def assert_deliverer_status(context: dict, status: str):
+    payload = context['response']
+    assert payload['status'] == status
 
 
-# @then(parsers.parse('apenas entregadores com status "{status}" devem ser retornados'))
-# def assert_list_filtered_by_status(context: dict, status: str):
-#     items = context['response']['items']
-#     assert len(items) > 0
-#     assert all(item['status'] == status for item in items)
+@then(parsers.parse('apenas entregadores com status "{status}" devem ser retornados'))
+def assert_list_filtered_by_status(context: dict, status: str):
+    items = context['response']['items']
+    assert len(items) > 0
+    assert all(item['status'] == status for item in items)
 
 
-# @then(parsers.parse('a ordem deve ser marcada como "{status}"'))
-# def assert_order_status(context: dict, status: str):
-#     payload = context['response']
-#     assert payload['status'] == status
+@then(parsers.parse('a ordem deve ser marcada como "{status}"'))
+def assert_order_status(context: dict, status: str):
+    payload = context['response']
+    assert payload['status'] == status
 
 
 @then('o entregador deve ser marcado como "OCCUPIED"')
@@ -263,11 +263,11 @@ def assert_deliverer_occupied(context: dict):
     assert deliverer.status == DelivererStatus.OCCUPIED
 
 
-# @then(parsers.parse('a ordem deve ser atribuida ao entregador "{name}"'))
-# def assert_order_assigned_to_named_deliverer(context: dict, name: str):
-#     payload = context['response']
-#     expected_id = context['deliverers_by_name'][name]['id']
-#     assert payload['assigned_deliverer_id'] == expected_id
+@then(parsers.parse('a ordem deve ser atribuida ao entregador "{name}"'))
+def assert_order_assigned_to_named_deliverer(context: dict, name: str):
+    payload = context['response']
+    expected_id = context['deliverers_by_name'][name]['id']
+    assert payload['assigned_deliverer_id'] == expected_id
 
 
 @then(parsers.parse('o sistema deve retornar erro "{message}"'))
@@ -276,13 +276,13 @@ def assert_assignment_error(context: dict, message: str):
     assert context['response']['detail'] == message
 
 
-# @then('a nova atribuicao deve escolher outro entregador disponivel')
-# def assert_reassignment_changed_deliverer(context: dict):
-#     original_id = context['order']['assigned_deliverer_id']
-#     current_id = context['response']['assigned_deliverer_id']
-#     assert current_id != original_id
+@then('a nova atribuicao deve escolher outro entregador disponivel')
+def assert_reassignment_changed_deliverer(context: dict):
+    original_id = context['order']['assigned_deliverer_id']
+    current_id = context['response']['assigned_deliverer_id']
+    assert current_id != original_id
 
 
-# @then('a ordem deve continuar em "IN_DELIVERY"')
-# def assert_order_stays_in_delivery(context: dict):
-#     assert context['response']['status'] == OrderStatus.IN_DELIVERY.value
+@then('a ordem deve continuar em "IN_DELIVERY"')
+def assert_order_stays_in_delivery(context: dict):
+    assert context['response']['status'] == OrderStatus.IN_DELIVERY.value
