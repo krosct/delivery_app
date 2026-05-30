@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from core.config import settings
+from modulos.restaurante.rotas import router as restaurante_router
+from modulos.pagamento.rotas import router as pagamento_router
+from modulos.restaurante.controle import RestauranteControle
 from modulos.delivery.http.api import router as deliverers_router
 import logging
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -37,6 +40,8 @@ app.add_middleware(
 scheduler = BackgroundScheduler()
 
 # Inclusão das rotas modulares
+app.include_router(restaurante_router, prefix=settings.API_V1_STR)
+app.include_router(pagamento_router, prefix=settings.API_V1_STR)
 app.include_router(deliverers_router, prefix='/api')
 if restaurante_router is not None:
     app.include_router(restaurante_router, prefix=settings.API_V1_STR)
