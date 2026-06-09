@@ -92,6 +92,10 @@ function DelivererRoutes() {
             await changeStatus(status)
             await refresh()
           }}
+          onAdvanceStatus={async () => {
+            await refresh()
+            setTab('active')
+          }}
         />
       )}
 
@@ -111,6 +115,12 @@ function DelivererRoutes() {
             await deliver(deliveryId, session.id)
             await refresh()
             setTab('history')
+          }}
+          onAdvanced={async (completed) => {
+            await refresh()
+            if (completed) {
+              setTab('history')
+            }
           }}
         />
       )}
