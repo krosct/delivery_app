@@ -2,6 +2,7 @@ import Button from '../../../shared/components/Button'
 import Card from '../../../shared/components/Card'
 import EmptyState from '../../../shared/components/EmptyState'
 import Loading from '../../../shared/components/Loading'
+import MetricCard from '../../../shared/components/MetricCard'
 import type { Delivery, Deliverer, DelivererSession } from '../types'
 import DeliveryCard from '../components/DeliveryCard'
 import StatusBadge from '../components/StatusBadge'
@@ -68,26 +69,18 @@ function DashboardPage({
   return (
     <section className="grid">
       <div className="metric-grid">
-        <Card className="metric-card">
-          <p className="metric-card__label">Sessão ativa</p>
-          <strong>{session.name}</strong>
-          <p>{session.region}</p>
-        </Card>
-        <Card className="metric-card">
-          <p className="metric-card__label">Disponíveis</p>
-          <strong>{availableDeliveries.length}</strong>
-          <p>Entregas prontas para agir</p>
-        </Card>
-        <Card className="metric-card">
-          <p className="metric-card__label">Em rota</p>
-          <strong>{activeDeliveries.length}</strong>
-          <p>{completedDeliveries.length} concluídas na lista</p>
-        </Card>
-        <Card className="metric-card">
-          <p className="metric-card__label">Entregadores livres</p>
-          <strong>{availableDeliverers.length}</strong>
-          <p>{busyDeliverers.length} ocupados</p>
-        </Card>
+        <MetricCard label="Sessão ativa" value={session.name} detail={session.region} />
+        <MetricCard label="Disponíveis" value={availableDeliveries.length} detail="Entregas prontas para agir" />
+        <MetricCard
+          label="Em rota"
+          value={activeDeliveries.length}
+          detail={`${completedDeliveries.length} concluídas na lista`}
+        />
+        <MetricCard
+          label="Entregadores livres"
+          value={availableDeliverers.length}
+          detail={`${busyDeliverers.length} ocupados`}
+        />
       </div>
 
       <Card>

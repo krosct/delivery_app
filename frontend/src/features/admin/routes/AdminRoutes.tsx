@@ -1,6 +1,7 @@
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../../app/providers/AuthProvider'
-import Button from '../../../shared/components/Button'
+import AppShell from '../../../shared/components/AppShell'
+import TopBar from '../../../shared/components/TopBar'
 import AdminDashboard from '../pages/AdminDashboard'
 
 function AdminLayout() {
@@ -13,23 +14,17 @@ function AdminLayout() {
   }
 
   return (
-    <main className="page">
-      <header className="section-head section-head--spaced">
-        <div>
-          <h2>{user?.nome ?? 'Admin'}</h2>
-          <p>Painel administrativo</p>
-        </div>
-        <div className="actions">
-          <Button variant="secondary" onClick={handleLogout}>
-            Sair
-          </Button>
-        </div>
-      </header>
+    <AppShell>
+      <TopBar
+        title={user?.nome ?? 'Admin'}
+        subtitle="Painel administrativo"
+        onLogout={handleLogout}
+      />
 
       <Routes>
         <Route index element={<AdminDashboard />} />
       </Routes>
-    </main>
+    </AppShell>
   )
 }
 

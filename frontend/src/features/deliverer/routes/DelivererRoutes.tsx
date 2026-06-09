@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../../app/providers/AuthProvider'
+import AppShell from '../../../shared/components/AppShell'
 import Loading from '../../../shared/components/Loading'
 import DelivererHeader from '../components/DelivererHeader'
 import ActiveDeliveryPage from '../pages/ActiveDeliveryPage'
@@ -66,7 +67,7 @@ function DelivererRoutes() {
   }
 
   return (
-    <main className="page">
+    <AppShell>
       {header}
 
       {tab === 'dashboard' && (
@@ -134,7 +135,7 @@ function DelivererRoutes() {
           onUseProfileRegion={() => setRegion(session.region)}
         />
       )}
-    </main>
+    </AppShell>
   )
 }
 

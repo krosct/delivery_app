@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../../app/providers/AuthProvider'
-import Card from '../../../shared/components/Card'
 import EmptyState from '../../../shared/components/EmptyState'
 import LoadingState from '../../../shared/components/LoadingState'
+import MetricCard from '../../../shared/components/MetricCard'
 import { getOrders } from '../api/restaurantApi'
 import type { Order } from '../../customer/types'
 import { countByStatus, RESTAURANT_METRIC_STATUSES } from '../utils/orderHelpers'
@@ -63,11 +63,12 @@ function RestaurantDashboardPage() {
 
       <div className="metric-grid">
         {RESTAURANT_METRIC_STATUSES.map((status) => (
-          <Card key={status} className="metric-card">
-            <p className="metric-card__label">{status}</p>
-            <strong>{countByStatus(orders, status)}</strong>
-            <p>pedidos neste status</p>
-          </Card>
+          <MetricCard
+            key={status}
+            label={status}
+            value={countByStatus(orders, status)}
+            detail="pedidos neste status"
+          />
         ))}
       </div>
 

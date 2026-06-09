@@ -1,6 +1,7 @@
 import { Link, Route, Routes, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../../app/providers/AuthProvider'
-import Button from '../../../shared/components/Button'
+import AppShell from '../../../shared/components/AppShell'
+import TopBar from '../../../shared/components/TopBar'
 import RestaurantDashboardPage from '../pages/RestaurantDashboardPage'
 import RestaurantDecisionPage from '../pages/RestaurantDecisionPage'
 import RestaurantOrdersPage from '../pages/RestaurantOrdersPage'
@@ -15,31 +16,29 @@ function RestaurantLayout() {
   }
 
   return (
-    <main className="page">
-      <header className="section-head section-head--spaced">
-        <div>
-          <h2>{user?.nome ?? 'Restaurante'}</h2>
-          <p>Painel operacional</p>
-        </div>
-        <div className="actions">
-          <Link to="/restaurant" className="btn btn--ghost">
-            Dashboard
-          </Link>
-          <Link to="/restaurant/orders" className="btn btn--ghost">
-            Pedidos
-          </Link>
-          <Button variant="secondary" onClick={handleLogout}>
-            Sair
-          </Button>
-        </div>
-      </header>
+    <AppShell>
+      <TopBar
+        title={user?.nome ?? 'Restaurante'}
+        subtitle="Painel operacional"
+        onLogout={handleLogout}
+        actions={
+          <>
+            <Link to="/restaurant" className="btn btn--ghost">
+              Dashboard
+            </Link>
+            <Link to="/restaurant/orders" className="btn btn--ghost">
+              Pedidos
+            </Link>
+          </>
+        }
+      />
 
       <Routes>
         <Route index element={<RestaurantDashboardPage />} />
         <Route path="orders" element={<RestaurantOrdersPage />} />
         <Route path="orders/:id" element={<RestaurantDecisionPage />} />
       </Routes>
-    </main>
+    </AppShell>
   )
 }
 

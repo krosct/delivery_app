@@ -1,5 +1,6 @@
 import Button from '../../../shared/components/Button'
 import Card from '../../../shared/components/Card'
+import MetricCard from '../../../shared/components/MetricCard'
 import type { DelivererSession } from '../types'
 
 function ProfileCard({
@@ -20,14 +21,8 @@ function ProfileCard({
         </div>
       </div>
       <div className="metric-grid metric-grid--compact">
-        <Card className="metric-card metric-card--compact">
-          <p className="metric-card__label">Nome</p>
-          <strong>{session.name}</strong>
-        </Card>
-        <Card className="metric-card metric-card--compact">
-          <p className="metric-card__label">Região</p>
-          <strong>{session.region}</strong>
-        </Card>
+        <MetricCard compact label="Nome" value={session.name} />
+        <MetricCard compact label="Região" value={session.region} />
       </div>
       <div className="stack">
         <p><strong>ID:</strong> {session.id}</p>

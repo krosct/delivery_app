@@ -3,7 +3,8 @@ import { useAuth } from '../../../app/providers/AuthProvider'
 import Card from '../../../shared/components/Card'
 import EmptyState from '../../../shared/components/EmptyState'
 import LoadingState from '../../../shared/components/LoadingState'
-import StatusChip from '../../customer/components/StatusChip'
+import MetricCard from '../../../shared/components/MetricCard'
+import StatusChip from '../../../shared/components/StatusChip'
 import type { Order } from '../../customer/types'
 import { getMetrics, getPedidos, type AdminMetrics } from '../api/adminApi'
 
@@ -67,10 +68,7 @@ function AdminDashboard() {
 
       <div className="metric-grid">
         {METRIC_LABELS.map(({ key, label }) => (
-          <Card key={key} className="metric-card">
-            <p className="metric-card__label">{label}</p>
-            <strong>{metrics[key]}</strong>
-          </Card>
+          <MetricCard key={key} label={label} value={metrics[key]} />
         ))}
       </div>
 

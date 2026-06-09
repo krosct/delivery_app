@@ -1,6 +1,7 @@
 import { Route, Routes, useLocation } from 'react-router-dom'
 import { CartProvider } from '../context/CartContext'
-import BottomNavigation from '../components/BottomNavigation'
+import AppShell from '../../../shared/components/AppShell'
+import BottomNavigation from '../../../shared/components/BottomNavigation'
 import HomePage from '../pages/HomePage'
 import MenuPage from '../pages/MenuPage'
 import CartPage from '../pages/CartPage'
@@ -17,7 +18,7 @@ function CustomerLayout() {
 
   return (
     <div className="customer-layout">
-      <main className="page customer-page">
+      <AppShell className="customer-page">
         <Routes>
           <Route index element={<HomePage />} />
           <Route path="menu/:restaurantId" element={<MenuPage />} />
@@ -27,7 +28,7 @@ function CustomerLayout() {
           <Route path="orders" element={<OrderHistoryPage />} />
           <Route path="profile" element={<ProfilePage />} />
         </Routes>
-      </main>
+      </AppShell>
       {showBottomNav && <BottomNavigation />}
     </div>
   )
