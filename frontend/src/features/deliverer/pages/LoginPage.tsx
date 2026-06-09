@@ -14,10 +14,15 @@ type LoginPageProps = {
 function LoginPage({ form, loading = false, error, onChange, onSubmit }: LoginPageProps) {
   return (
     <main className="page page--login">
-      <section className="hero">
+      <section className="hero hero--login">
         <p className="eyebrow">Deliverer</p>
-        <h1 className="title">Acesse seu painel de entregas</h1>
-        <p className="subtitle">Entre com seus dados para gerenciar disponibilidade, aceitar entregas e finalizar pedidos.</p>
+        <h1 className="title">Seu próximo pedido, sem ruído</h1>
+        <p className="subtitle">Entre para ver o que está disponível, assumir uma entrega e concluir o trajeto com poucos toques.</p>
+        <div className="hero__actions">
+          <span className="status-chip status-chip--soft">Disponibilidade</span>
+          <span className="status-chip status-chip--soft">Acompanhamento</span>
+          <span className="status-chip status-chip--soft">Histórico</span>
+        </div>
       </section>
 
       <Card className="panel panel--login">

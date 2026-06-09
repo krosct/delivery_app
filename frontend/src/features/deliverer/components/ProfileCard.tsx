@@ -15,9 +15,19 @@ function ProfileCard({
     <Card>
       <div className="section-head">
         <div>
-          <h2>Deliverer Profile</h2>
+          <h2>Perfil</h2>
           <p>Dados básicos da conta e região ativa.</p>
         </div>
+      </div>
+      <div className="metric-grid metric-grid--compact">
+        <Card className="metric-card metric-card--compact">
+          <p className="metric-card__label">Nome</p>
+          <strong>{session.name}</strong>
+        </Card>
+        <Card className="metric-card metric-card--compact">
+          <p className="metric-card__label">Região</p>
+          <strong>{session.region}</strong>
+        </Card>
       </div>
       <div className="stack">
         <p><strong>ID:</strong> {session.id}</p>

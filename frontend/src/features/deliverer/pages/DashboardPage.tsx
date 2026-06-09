@@ -31,13 +31,33 @@ function DashboardPage({
   onStatusChange,
 }: DashboardPageProps) {
   const availableDeliveries = deliveries.filter((delivery) => delivery.status === 'WAITING' || delivery.status === 'ASSIGNED')
+  const availableDeliverers = deliverers.filter((deliverer) => deliverer.status === 'AVAILABLE')
+  const busyDeliverers = deliverers.filter((deliverer) => deliverer.status === 'BUSY' || deliverer.status === 'OCCUPIED')
 
   return (
     <section className="grid">
+      <div className="metric-grid">
+        <Card className="metric-card">
+          <p className="metric-card__label">Sessão ativa</p>
+          <strong>{session.name}</strong>
+          <p>{session.region}</p>
+        </Card>
+        <Card className="metric-card">
+          <p className="metric-card__label">Disponíveis agora</p>
+          <strong>{availableDeliveries.length}</strong>
+          <p>Entregas prontas para agir</p>
+        </Card>
+        <Card className="metric-card">
+          <p className="metric-card__label">Entregadores livres</p>
+          <strong>{availableDeliverers.length}</strong>
+          <p>{busyDeliverers.length} ocupados</p>
+        </Card>
+      </div>
+
       <Card>
         <div className="section-head">
           <div>
-            <h2>Disponíveis</h2>
+            <h2>Disponíveis agora</h2>
             <p>Entregas prontas para atribuição ou aceitação.</p>
           </div>
           <Button variant="ghost" onClick={onRefresh}>Atualizar</Button>
@@ -62,7 +82,7 @@ function DashboardPage({
         <div className="section-head">
           <div>
             <h2>Disponibilidade</h2>
-            <p>Controle simples de presença e carga.</p>
+            <p>Controle simples de presença e carga operacional.</p>
           </div>
         </div>
         <div className="actions actions--stacked">

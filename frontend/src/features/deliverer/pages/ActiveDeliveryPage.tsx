@@ -17,12 +17,17 @@ function ActiveDeliveryPage({ session, delivery, onAccept, onPickup, onDeliver }
       <Card>
         <div className="section-head">
           <div>
-            <h2>Active Delivery</h2>
-            <p>Entrega em andamento para o entregador logado.</p>
+            <h2>Entrega ativa</h2>
+            <p>O próximo passo aparece aqui com prioridade máxima.</p>
           </div>
         </div>
         {delivery ? (
           <div className="stack">
+            <div className="status-strip">
+              <span className="status-chip status-chip--soft">Aceitar</span>
+              <span className="status-chip status-chip--soft">Coletar</span>
+              <span className="status-chip status-chip--soft">Entregar</span>
+            </div>
             <p><strong>Entregador:</strong> {session.name}</p>
             <p><strong>Pedido:</strong> {delivery.orderId}</p>
             <p><strong>Status:</strong> {delivery.status}</p>

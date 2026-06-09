@@ -13,9 +13,14 @@ function HistoryPage({ deliveries }: HistoryPageProps) {
       <Card>
         <div className="section-head">
           <div>
-            <h2>Delivery History</h2>
+            <h2>Histórico</h2>
             <p>Últimas entregas concluídas ou em andamento.</p>
           </div>
+        </div>
+        <div className="status-strip">
+          <span className="status-chip status-chip--soft">Hoje</span>
+          <span className="status-chip status-chip--soft">Semana</span>
+          <span className="status-chip status-chip--soft">Mês</span>
         </div>
         {deliveries.length === 0 ? <EmptyState message="Nenhuma entrega registrada." /> : <HistoryList deliveries={deliveries} />}
       </Card>
