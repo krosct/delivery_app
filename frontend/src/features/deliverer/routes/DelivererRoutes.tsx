@@ -18,7 +18,7 @@ function DelivererRoutes() {
   const [tab, setTab] = useState<DelivererTab>('dashboard')
   const [region, setRegion] = useState(DEFAULT_REGION)
   const [loginForm, setLoginForm] = useState({ name: 'Ana', phone: '11999999999', region: DEFAULT_REGION })
-  const { deliverers, deliveries, loading, refresh, assign, accept, pickup, deliver } = useDeliveries(region)
+  const { deliverers, deliveries, loading, refreshedAt, refresh, assign, accept, pickup, deliver } = useDeliveries(region)
   const activeDelivery = useActiveDelivery(deliveries, session?.id)
   const history = useDeliveryHistory(deliveries, session?.id)
 
@@ -65,6 +65,7 @@ function DelivererRoutes() {
           session={session}
           region={region}
           loading={loading}
+          refreshedAt={refreshedAt}
           deliveries={deliveries}
           deliverers={deliverers}
           onRefresh={refresh}

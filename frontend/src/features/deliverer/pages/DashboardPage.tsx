@@ -11,6 +11,7 @@ type DashboardPageProps = {
   session: DelivererSession
   region: string
   loading: boolean
+  refreshedAt?: string | null
   deliveries: Delivery[]
   deliverers: Deliverer[]
   onRefresh: () => void
@@ -23,6 +24,7 @@ function DashboardPage({
   session,
   region,
   loading,
+  refreshedAt,
   deliveries,
   deliverers,
   onRefresh,
@@ -31,8 +33,11 @@ function DashboardPage({
   onStatusChange,
 }: DashboardPageProps) {
   const availableDeliveries = deliveries.filter((delivery) => delivery.status === 'WAITING' || delivery.status === 'ASSIGNED')
+  const activeDeliveries = deliveries.filter((delivery) => delivery.status === 'IN_DELIVERY' || delivery.status === 'PICKED_UP')
   const availableDeliverers = deliverers.filter((deliverer) => deliverer.status === 'AVAILABLE')
   const busyDeliverers = deliverers.filter((deliverer) => deliverer.status === 'BUSY' || deliverer.status === 'OCCUPIED')
+  const completedDeliveries = deliveries.filter((delivery) => delivery.status === 'DELIVERED')
+  const freshnessLabel = refreshedAt ? `Atualizado às ${new Date(refreshedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : 'Aguardando atualização'
 
   return (
     <section className="grid">
@@ -43,9 +48,14 @@ function DashboardPage({
           <p>{session.region}</p>
         </Card>
         <Card className="metric-card">
-          <p className="metric-card__label">Disponíveis agora</p>
+          <p className="metric-card__label">Disponíveis</p>
           <strong>{availableDeliveries.length}</strong>
           <p>Entregas prontas para agir</p>
+        </Card>
+        <Card className="metric-card">
+          <p className="metric-card__label">Em rota</p>
+          <strong>{activeDeliveries.length}</strong>
+          <p>{completedDeliveries.length} concluídas na lista</p>
         </Card>
         <Card className="metric-card">
           <p className="metric-card__label">Entregadores livres</p>
@@ -60,7 +70,10 @@ function DashboardPage({
             <h2>Disponíveis agora</h2>
             <p>Entregas prontas para atribuição ou aceitação.</p>
           </div>
-          <Button variant="ghost" onClick={onRefresh}>Atualizar</Button>
+          <div className="section-head__meta">
+            <span className="status-chip status-chip--soft">{freshnessLabel}</span>
+            <Button variant="ghost" onClick={onRefresh}>Atualizar</Button>
+          </div>
         </div>
         {loading && <Loading />}
         {!loading && availableDeliveries.length === 0 && <EmptyState message="Nenhuma entrega disponível para esta região." />}

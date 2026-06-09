@@ -38,6 +38,20 @@ tasks:
       - frontend/src/features/deliverer/__tests__/DelivererHeader.test.tsx
       - frontend/src/features/deliverer/__tests__/LoginPage.test.tsx
       - frontend/src/features/deliverer/__tests__/DashboardPage.test.tsx
+  - taskId: T009
+    status: completed
+    files:
+      - frontend/src/features/deliverer/hooks/useDeliveries.ts
+  - taskId: T010
+    status: completed
+    files:
+      - frontend/src/features/deliverer/components/DeliveryCard.tsx
+  - taskId: T011
+    status: completed
+    files:
+      - frontend/src/features/deliverer/routes/DelivererRoutes.tsx
+      - frontend/src/features/deliverer/pages/DashboardPage.tsx
+      - frontend/src/features/deliverer/pages/HistoryPage.tsx
 tests:
   suites: 10
   passed: 10

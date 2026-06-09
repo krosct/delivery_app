@@ -150,3 +150,11 @@ This plan turns the current deliverer prototype into a mobile-first, iFood-inspi
 ### Baseline Validation
 
 - [ ] T008 [Plan:1.3,1.2] Update or extend `frontend/src/features/deliverer/__tests__/*.test.*` to confirm the shell, login, and dashboard still render after the visual refactor.
+
+### Phase 2: Operational dashboard
+
+#### Metrics and freshness
+
+- [ ] T009 [P] [Plan:2.1] Extend `frontend/src/features/deliverer/hooks/useDeliveries.ts` to expose refresh freshness and operational counts for the dashboard.
+- [ ] T010 [P] [Plan:2.1] Enrich `frontend/src/features/deliverer/components/DeliveryCard.tsx` with richer status affordances and timeline details.
+- [ ] T011 [Plan:2.2] Update `frontend/src/features/deliverer/routes/DelivererRoutes.tsx`, `frontend/src/features/deliverer/pages/DashboardPage.tsx`, and `frontend/src/features/deliverer/pages/HistoryPage.tsx` to surface freshness, summary metrics, and the updated delivery summary experience.

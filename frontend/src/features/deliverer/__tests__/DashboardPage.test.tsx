@@ -28,7 +28,8 @@ describe('DashboardPage', () => {
     )
 
     expect(screen.getByText('Sessão ativa')).toBeInTheDocument()
-    expect(screen.getByText('Disponíveis agora', { selector: '.metric-card__label' })).toBeInTheDocument()
+    expect(screen.getByText('Disponíveis', { selector: '.metric-card__label' })).toBeInTheDocument()
     expect(screen.getByText('Entregadores livres')).toBeInTheDocument()
+    expect(screen.getByText('Aguardando atualização')).toBeInTheDocument()
   })
 })

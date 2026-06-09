@@ -8,6 +8,9 @@ type HistoryPageProps = {
 }
 
 function HistoryPage({ deliveries }: HistoryPageProps) {
+  const deliveredCount = deliveries.filter((delivery) => delivery.status === 'DELIVERED').length
+  const inProgressCount = deliveries.filter((delivery) => delivery.status === 'IN_DELIVERY' || delivery.status === 'PICKED_UP').length
+
   return (
     <section className="grid">
       <Card>
@@ -18,9 +21,9 @@ function HistoryPage({ deliveries }: HistoryPageProps) {
           </div>
         </div>
         <div className="status-strip">
-          <span className="status-chip status-chip--soft">Hoje</span>
-          <span className="status-chip status-chip--soft">Semana</span>
-          <span className="status-chip status-chip--soft">Mês</span>
+          <span className="status-chip status-chip--soft">Concluídas {deliveredCount}</span>
+          <span className="status-chip status-chip--soft">Em rota {inProgressCount}</span>
+          <span className="status-chip status-chip--soft">Total {deliveries.length}</span>
         </div>
         {deliveries.length === 0 ? <EmptyState message="Nenhuma entrega registrada." /> : <HistoryList deliveries={deliveries} />}
       </Card>

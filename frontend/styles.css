@@ -164,6 +164,13 @@ input {
   margin-bottom: 14px;
 }
 
+.section-head__meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
 .section-head--spaced {
   margin-top: 24px;
 }
@@ -224,6 +231,33 @@ input {
 }
 
 .metric-card p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.delivery-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.delivery-card__title {
+  display: grid;
+  gap: 4px;
+}
+
+.delivery-card__chips {
+  margin-top: 10px;
+}
+
+.delivery-card__details {
+  display: grid;
+  gap: 6px;
+  margin: 12px 0;
+}
+
+.delivery-card__details p {
   margin: 0;
   color: var(--text-secondary);
 }
