@@ -1,6 +1,6 @@
 from modulos.delivery.application.services.deliverers_service import DelivererService
 from modulos.delivery.infrastructure.sqlalchemy_repositories import DelivererRepositorySQL, OrderRepositorySQL
-from backend.core.database import init_db
+from core.database import init_db
 
 
 # initialize database and repositories
@@ -17,7 +17,7 @@ deliverer_service = DelivererService(
 
 def reset_delivery_state() -> None:
     # For SQLAlchemy-backed repo, simply drop all rows from tables (development helper)
-    from backend.core.database import engine
+    from core.database import engine
     from modulos.delivery.infrastructure.models import DelivererModel, DeliveryModel, DeliveryAssignmentModel
     conn = engine.connect()
     trans = conn.begin()

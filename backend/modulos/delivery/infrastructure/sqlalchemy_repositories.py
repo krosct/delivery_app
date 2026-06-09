@@ -8,7 +8,7 @@ from modulos.delivery.domain.entities import Deliverer, Delivery
 from modulos.delivery.domain.enums import DelivererStatus, DeliveryStatus
 from modulos.delivery.domain.ports import DelivererRepository, OrderRepository
 from modulos.delivery.infrastructure.models import DelivererModel, DeliveryModel, DeliveryAssignmentModel
-from backend.core.database import SessionLocal
+from core.database import SessionLocal
 
 
 class DelivererRepositorySQL(DelivererRepository):

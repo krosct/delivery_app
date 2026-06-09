@@ -1,16 +1,16 @@
 services:
   db:
     image: mysql:latest
-    container_name: ${DB_NAME}
+    container_name: ${DB_NAME:-yummicious_db}
     restart: always
     environment:
-      - TZ=${TZ}
-      - MYSQL_DATABASE=${DB_NAME}
-      - MYSQL_USER=${DB_USER}
-      - MYSQL_PASSWORD=${DB_PASSWORD}
-      - MYSQL_ROOT_PASSWORD=${SECRET_KEY}
+      - TZ=${TZ:-America/Sao_Paulo}
+      - MYSQL_DATABASE=${DB_NAME:-yummicious_db}
+      - MYSQL_USER=${DB_USER:-delivery_user}
+      - MYSQL_PASSWORD=${DB_PASSWORD:-delivery_pass}
+      - MYSQL_ROOT_PASSWORD=${SECRET_KEY:-super-secret-key-change-it-in-production}
     ports:
-      - "${DB_PORT}:${DB_PORT}"
+      - "${DB_PORT:-3306}:3306"
     volumes:
       - ./database/db_files:/var/lib/mysql
       - ./database/esquemas:/docker-entrypoint-initdb.d
@@ -25,14 +25,14 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: ${BACKEND_NAME}
+    container_name: ${BACKEND_NAME:-yummicious_back}
     restart: always
     environment:
       - DB_HOST=db
-      - DB_PORT=${DB_PORT}
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_NAME=${DB_NAME}
+      - DB_PORT=${DB_PORT:-3306}
+      - DB_USER=${DB_USER:-delivery_user}
+      - DB_PASSWORD=${DB_PASSWORD:-delivery_pass}
+      - DB_NAME=${DB_NAME:-yummicious_db}
     ports:
       - "8000:8000"
     depends_on:
@@ -42,17 +42,17 @@ services:
       - delivery_network
 
   frontend:
-    image: node:jod-alpine
-    container_name: ${FRONTEND_NAME}
+    image: node:22-alpine
+    container_name: ${FRONTEND_NAME:-yummicious_front}
     restart: always
     working_dir: /app
     environment:
-      - TZ=${TZ}
+      - TZ=${TZ:-America/Sao_Paulo}
     volumes:
-      - ./frontend:/app
+      - ./:/app
     ports:
-      - "3000:3000"
-    command: sh -c "npm install && npm run dev"
+      - "4173:4173"
+    command: sh -c "npm install && npm run dev:frontend -- --host 0.0.0.0 --port 4173"
     networks:
       - delivery_network
 
