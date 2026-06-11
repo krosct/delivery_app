@@ -1,5 +1,5 @@
 # Estágio de build para reduzir o tamanho final
-FROM python:alpine AS builder
+FROM python:3.12-alpine AS builder
 
 WORKDIR /app
 
@@ -10,7 +10,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
 
 # Estágio final
-FROM python:alpine
+FROM python:3.12-alpine
 
 WORKDIR /app
 
@@ -27,11 +27,13 @@ COPY --from=builder /install /usr/local
 COPY . .
 
 # Criar um usuário não-root para segurança
-RUN adduser -D appuser && chown -R appuser:appuser /app
+RUN chmod +x entrypoint.sh \
+    && adduser -D appuser \
+    && chown -R appuser:appuser /app
 USER appuser
 
 # Expor a porta que o FastAPI utiliza
 EXPOSE 8000
 
-# Comando para iniciar a aplicação
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Aplica migrações SQLAlchemy e inicia a API
+ENTRYPOINT ["./entrypoint.sh"]
